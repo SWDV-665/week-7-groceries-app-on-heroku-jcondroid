@@ -1,3 +1,5 @@
 page-home {
-
+    .no-item {
+        color: map-get($colors , 'dark-gray');
+    }
 }

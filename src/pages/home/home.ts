@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { GroceriesServiceProvider } from '../../providers/groceries-service/groceries-service';
+import { InputDialogServiceProvider } from '../../providers/input-dialog-service/input-dialog-service';
 
 @Component({
   selector: 'page-home',
@@ -10,23 +12,12 @@ import { AlertController } from 'ionic-angular';
 export class HomePage {
   title = "Grocery";
 
-  items = [
-    {
-      name: "Milk"
-      , quantity: 1
-    }
-    , {
-      name: "Bread"
-      , quantity: 2
-    }
-    , {
-      name: "Butter"
-      , quantity: 4
-    }
-  ]
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceProvider, public inputDialogService: InputDialogServiceProvider) {
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+  }
 
+  load_items() {
+    return this.dataService.get_items();
   }
 
   remove_item(item, index) {
@@ -37,47 +28,24 @@ export class HomePage {
     });
 
     toast.present();
-    this.items.splice(index, 1);
+    this.dataService.remove_item(index);
+  }
+
+  edit_item(item, index) {
+    console.log("editing item - ", index);
+    const toast = this.toastCtrl.create({
+      message: 'Editing Item - ' + index + "...",
+      duration: 3000
+    });
+
+    toast.present();
+    this.inputDialogService.showPrompt(item, index);
   }
 
   add_item() {
     console.log('Adding item');
-    this.show_add_item_prompt();
+    this.inputDialogService.showPrompt();
   }
 
-  show_add_item_prompt() {
-    const prompt = this.alertCtrl.create({
-      title: 'Add Grocery Item'
-      , message: "Please enter grocery item..."
-      , inputs: [
-        {
-          name: 'name'
-          , placeholder: 'Grocery Name'
-        }
-        , {
-          name: 'quantity'
-          , placeholder: 'How many?'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-          , handler: item => {
-            console.log('Cancel clicked');
-          }
-        }
-        , {
-          text: 'Save'
-          , handler: item => {
-            console.log('Save clicked', item);
-            this.items.push(item);
-          }
-
-        }
-      ]
-    });
-
-    prompt.present();
-  }
-
+  
 }
