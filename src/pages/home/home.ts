@@ -12,36 +12,42 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 })
 export class HomePage {
   title = "Grocery";
+  items = [];
+  errorMessage: string;
 
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceProvider, public inputDialogService: InputDialogServiceProvider, public socialSharing: SocialSharing) {
-
+    dataService.dataChanged$.subscribe((dataChanged: boolean) => {
+      this.loadItems();
+    });
   }
 
-  load_items() {
-    return this.dataService.get_items();
+  ionViewWillEnter() {
+    this.loadItems();
   }
 
-  remove_item(item, index) {
-    console.log("removing item - ", index);
+  loadItems() {
+    this.dataService.getItems()
+    .subscribe(
+      items => this.items = items,
+      error => this.errorMessage = <any> error);
+  }
+
+  removeItem(item) {
+    this.dataService.remove_item(item._id);
+  }
+
+  share_item(item) {
+    console.log("sharing item - ", item);
     const toast = this.toastCtrl.create({
-      message: 'Removing Item - ' + index + "...",
+      message: 'Sharing Item - ' + item.name + "...",
       duration: 3000
     });
 
     toast.present();
-    this.dataService.remove_item(index);
-  }
 
-  share_item(item, index) {
-    console.log("sharing item - ", index);
-    const toast = this.toastCtrl.create({
-      message: 'Sharing Item - ' + index + "...",
-      duration: 3000
-    });
-
-    toast.present();
     let message = "Grocery Item: " + item.name + " - Quantity: " + item.quantity;
     let subject = "Shared via my custom Groceries App";
+    
     this.socialSharing.share(message, subject).then(() => {
       console.log("Shared successfully");
     }).catch((error) => {

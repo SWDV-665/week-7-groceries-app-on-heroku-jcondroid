@@ -50,24 +50,26 @@ export class InputDialogServiceProvider {
       buttons: [
         {
           text: 'Cancel'
-          , handler: item => {
+          , handler: data => {
             console.log('Cancel clicked');
           }
         }
         , {
           text: 'Save'
-          , handler: item => {
+          , handler: data => {
             // console.log('Save clicked', item);
-            console.log('Name: ', item.name);
-            console.log('Quantity: ', item.quantity);
+            console.log('Save Handler: ', data);
+            // console.log('Quantity: ', item.quantity);
             // Only add/edit the item if all fields have values
-            if(item.name !== "" && item.quantity !== "") {
+            // if(item.name !== "" && item.quantity !== "") {
               if (index !== undefined) {
+                item.name = data.name;
+                item.quantity = data.quantity;
                 this.dataService.edit_item(item, index);
               } else {
-                this.dataService.add_item(item);
+                this.dataService.add_item(data);
               }
-            }
+            // }
 
           }
 
