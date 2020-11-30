@@ -6,7 +6,7 @@
 
 <ion-content padding>
   <!-- Display message if no items found. -->
-  <div class="no-item" text-center *ngIf="loadItems().length === 0">
+  <div class="no-item" text-center *ngIf="items.length === 0">
     <h3>
     No items available.
     </h3>
@@ -16,7 +16,7 @@
   </div>
   <!-- List of Sliding Items -->
   <ion-list>
-    <ion-item-sliding *ngFor="let item of loadItems(); let i = index">
+    <ion-item-sliding *ngFor="let item of items; let i = index">
       <ion-item>
         <h2>{{item.name}}</h2>
         <p>{{item.quantity}}</p>
