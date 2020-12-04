@@ -17,7 +17,7 @@ export class GroceriesServiceProvider {
 
   dataChanged$: Observable<boolean>;
   private dataChangeSubject: Subject<boolean>;
-  baseURL = "http://172.0.0.1:8080";
+  baseURL = "http://localhost:8080";
   URL = this.baseURL + "/api/groceries/";
 
   constructor(public http: HttpClient) {
@@ -53,7 +53,7 @@ export class GroceriesServiceProvider {
  }
 
 
-  remove_item(id) {
+ removeItem(id) {
     console.log("### Remove Item - id = ", id);
     this.http.delete(this.baseURL + '/api/groceries/' + id).subscribe(res => {
       this.items = res;
@@ -62,7 +62,6 @@ export class GroceriesServiceProvider {
   }
 
   add_item(item) {
-    console.log("### Adding Item - ", item);
     this.http.post(this.baseURL + '/api/groceries', item).subscribe(res => {
       this.items = res;
       this.dataChangeSubject.next(true);
@@ -71,7 +70,7 @@ export class GroceriesServiceProvider {
 
   edit_item(item, index) {
     console.log("### Editing Item - ", item);
-    this.http.post(this.baseURL + '/api/groceries/' + item._id, item).subscribe(res => {
+    this.http.put(this.baseURL + '/api/groceries/' + item._id, item).subscribe(res => {
       this.items = res;
       this.dataChangeSubject.next(true);
     });

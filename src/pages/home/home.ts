@@ -33,7 +33,7 @@ export class HomePage {
   }
 
   removeItem(item) {
-    this.dataService.remove_item(item._id);
+    this.dataService.removeItem(item._id);
   }
 
   share_item(item) {
