@@ -17,7 +17,9 @@ export class GroceriesServiceProvider {
 
   dataChanged$: Observable<boolean>;
   private dataChangeSubject: Subject<boolean>;
-  baseURL = "http://localhost:8080";
+  // baseURL = "http://localhost:8080";
+  baseURL = "https://groceries-justin.herokuapp.com";
+
   URL = this.baseURL + "/api/groceries/";
 
   constructor(public http: HttpClient) {
@@ -42,7 +44,7 @@ export class GroceriesServiceProvider {
 
   private handle_error(error: Response | any) {
     let errMsg: string;
-    if(error instanceof Response) {
+    if (error instanceof Response) {
       const err = error || '';
       errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
     } else {
@@ -50,10 +52,10 @@ export class GroceriesServiceProvider {
     }
     console.error(errMsg);
     return Observable.throw(errMsg);
- }
+  }
 
 
- removeItem(id) {
+  removeItem(id) {
     console.log("### Remove Item - id = ", id);
     this.http.delete(this.baseURL + '/api/groceries/' + id).subscribe(res => {
       this.items = res;
